@@ -29,6 +29,8 @@ export interface QuizResult {
   score: number;
   totalQuestions: number;
   completedAt: Date;
+  isSection?: boolean;
+  sectionTitle?: string;
 }
 
 // User Profile Functions
