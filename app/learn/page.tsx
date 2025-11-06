@@ -90,7 +90,7 @@ export default function LearnPage() {
         <div className="p-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-white mb-2">
               📚 Learn with AI
             </h1>
             <p className="text-gray-600">Get personalized explanations and practice with quizzes</p>

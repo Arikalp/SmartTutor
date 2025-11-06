@@ -31,7 +31,7 @@ export default function Sidebar() {
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="text-2xl">🧠</div>
+            <div className="text-2xl bg-white rounded-full max-w-12 aspect-square p-2"><img src="\deep-learning.png"/> </div>
             <div>
               <h1 className="font-bold text-gray-900 dark:text-white">Smart Tutor</h1>
               <p className="text-xs text-gray-500 dark:text-gray-400">AI Learning Platform</p>
