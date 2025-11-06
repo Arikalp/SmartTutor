@@ -84,9 +84,9 @@ export default function DashboardPage() {
           ]);
           
           // Combine and format recent topics
-          const topics = sessions.slice(0, 3).map(session => {
+          const topics = sessions.slice(0, 3).map((session: any) => {
             // Find corresponding quiz result for this topic
-            const quizResult = quizResults.find(quiz => quiz.topic === session.topic);
+            const quizResult = quizResults.find((quiz: any) => quiz.topic === session.topic);
             const score = quizResult ? Math.round((quizResult.score / quizResult.totalQuestions) * 100) : null;
             
             return {

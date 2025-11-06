@@ -53,13 +53,13 @@ export default function ProgressPage() {
   const progressData = () => {
     const subjects: Record<string, { topics: number; quizzes: number; scores: number[]; }> = {};
     
-    studySessions.forEach(session => {
+    studySessions.forEach((session: any) => {
       const subject = getSubjectFromTopic(session.topic);
       if (!subjects[subject]) subjects[subject] = { topics: 0, quizzes: 0, scores: [] };
       subjects[subject].topics++;
     });
     
-    quizResults.forEach(result => {
+    quizResults.forEach((result: any) => {
       const subject = getSubjectFromTopic(result.topic);
       if (!subjects[subject]) subjects[subject] = { topics: 0, quizzes: 0, scores: [] };
       subjects[subject].quizzes++;
@@ -79,7 +79,7 @@ export default function ProgressPage() {
   const recentActivity = () => {
     const activities: any[] = [];
     
-    studySessions.slice(0, 3).forEach(session => {
+    studySessions.slice(0, 3).forEach((session: any) => {
       activities.push({
         date: new Date(session.createdAt.seconds * 1000).toLocaleDateString(),
         topic: session.topic,
@@ -88,7 +88,7 @@ export default function ProgressPage() {
       });
     });
     
-    quizResults.slice(0, 3).forEach(result => {
+    quizResults.slice(0, 3).forEach((result: any) => {
       activities.push({
         date: new Date(result.completedAt.seconds * 1000).toLocaleDateString(),
         topic: result.topic,

@@ -97,7 +97,7 @@ export default function Sidebar() {
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Recent Quizzes</h3>
           <div className="space-y-2">
-            {recentQuizzes.slice(0, 3).map((quiz, index) => (
+            {recentQuizzes.slice(0, 3).map((quiz: any, index: number) => (
               <div key={index} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2">
                 <div className="text-xs font-medium text-gray-900 dark:text-white truncate">
                   {quiz.topic.length > 20 ? quiz.topic.substring(0, 20) + '...' : quiz.topic}
