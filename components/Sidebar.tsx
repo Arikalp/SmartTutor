@@ -1,7 +1,9 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from './AuthProvider';
+import { getUserQuizResults } from '@/lib/firestore';
 import ThemeToggle from './ThemeToggle';
 import { FaBeer, FaBook, FaChartLine, FaHome, FaQuestion, FaUser } from 'react-icons/fa'
 import { FaBrain } from 'react-icons/fa6';
@@ -10,6 +12,22 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, userProfile, logout } = useAuth();
+  const [recentQuizzes, setRecentQuizzes] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchRecentQuizzes = async () => {
+      if (user) {
+        try {
+          const quizResults = await getUserQuizResults(user.uid);
+          setRecentQuizzes(quizResults);
+        } catch (error) {
+          console.error('Failed to fetch recent quizzes:', error);
+        }
+      }
+    };
+
+    fetchRecentQuizzes();
+  }, [user, userProfile]);
 
   const handleLogout = async () => {
     await logout();
@@ -73,6 +91,34 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
+
+      {/* Recent Quizzes */}
+      {user && recentQuizzes.length > 0 && (
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Recent Quizzes</h3>
+          <div className="space-y-2">
+            {recentQuizzes.slice(0, 3).map((quiz, index) => (
+              <div key={index} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2">
+                <div className="text-xs font-medium text-gray-900 dark:text-white truncate">
+                  {quiz.topic.length > 20 ? quiz.topic.substring(0, 20) + '...' : quiz.topic}
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                    {new Date(quiz.completedAt.seconds * 1000).toLocaleDateString()}
+                  </div>
+                  <div className={`text-xs font-semibold ${
+                    (quiz.score / quiz.totalQuestions * 100) >= 80 ? 'text-green-600 dark:text-green-400' :
+                    (quiz.score / quiz.totalQuestions * 100) >= 60 ? 'text-yellow-600 dark:text-yellow-400' :
+                    'text-red-600 dark:text-red-400'
+                  }`}>
+                    {Math.round(quiz.score / quiz.totalQuestions * 100)}%
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Navigation */}
       <nav className="flex-1 p-4">
