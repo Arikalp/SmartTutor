@@ -60,7 +60,12 @@ export default function ProfilePage() {
                   <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">{userProfile?.name || 'User'}</h2>
                   <p className="text-gray-600 dark:text-gray-300">{user?.email}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Member since {userProfile?.createdAt ? new Date(userProfile.createdAt.seconds * 1000).toLocaleDateString() : 'Recently'}
+                    Member since {userProfile?.createdAt ? (
+                      // createdAt may be a Firestore Timestamp or a JS Date; handle both
+                      (userProfile.createdAt as any)?.seconds ?
+                        new Date((userProfile.createdAt as any).seconds * 1000).toLocaleDateString() :
+                        new Date(userProfile.createdAt).toLocaleDateString()
+                    ) : 'Recently'}
                   </p>
                 </div>
               </div>

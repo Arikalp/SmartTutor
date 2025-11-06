@@ -75,8 +75,14 @@ export const getUserStudySessions = async (userId: string) => {
   const q = query(sessionsRef, where('userId', '==', userId));
   const querySnapshot = await getDocs(q);
   const sessions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  // Sort in JavaScript instead of Firestore
-  return sessions.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+  // Sort in JavaScript instead of Firestore. createdAt may be a Firestore Timestamp or a JS Date.
+  const getTime = (item: any) => {
+    const t = item?.createdAt;
+    if (!t) return 0;
+    if (typeof t === 'object' && 'seconds' in t) return t.seconds * 1000;
+    return new Date(t).getTime();
+  };
+  return sessions.sort((a, b) => getTime(b) - getTime(a));
 };
 
 // Quiz Result Functions
@@ -98,8 +104,14 @@ export const getUserQuizResults = async (userId: string) => {
   const q = query(resultsRef, where('userId', '==', userId));
   const querySnapshot = await getDocs(q);
   const results = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  // Sort in JavaScript instead of Firestore
-  return results.sort((a, b) => b.completedAt.seconds - a.completedAt.seconds);
+  // Sort in JavaScript instead of Firestore. completedAt may be a Firestore Timestamp or a JS Date.
+  const getCompleteTime = (item: any) => {
+    const t = item?.completedAt;
+    if (!t) return 0;
+    if (typeof t === 'object' && 'seconds' in t) return t.seconds * 1000;
+    return new Date(t).getTime();
+  };
+  return results.sort((a, b) => getCompleteTime(b) - getCompleteTime(a));
 };
 
 // Update User Statistics
@@ -113,7 +125,7 @@ export const updateUserStats = async (userId: string) => {
   const totalTopics = sessions.length;
   const totalQuizzes = results.length;
   const averageScore = totalQuizzes > 0 
-    ? results.reduce((sum, result) => sum + (result.score / result.totalQuestions * 100), 0) / totalQuizzes 
+    ? results.reduce((sum, result) => sum + (((result as any).score / (result as any).totalQuestions) * 100), 0) / totalQuizzes 
     : 0;
   
   const statsData = {
