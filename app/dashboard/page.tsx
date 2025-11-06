@@ -5,6 +5,8 @@ import { useAuth } from '@/components/AuthProvider';
 import { getUserStudySessions, getUserQuizResults } from '@/lib/firestore';
 import Sidebar from '@/components/Sidebar';
 import Link from 'next/link';
+import { HiBookOpen, HiChartBar, HiLightBulb, HiUser } from 'react-icons/hi';
+import { FaBrain } from 'react-icons/fa';
 
 export default function DashboardPage() {
   const [recentTopics, setRecentTopics] = useState<any[]>([]);
@@ -144,23 +146,23 @@ export default function DashboardPage() {
             <Link href="/learn" className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4">
                 <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
-                  <span className="text-2xl">📚</span>
+                  <span className="text-2xl text-white"><HiBookOpen /></span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Start Learning</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Explore new topics</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Quick Learn</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Feed Your Curiosity</p>
                 </div>
               </div>
             </Link>
 
-            <Link href="/quiz" className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700">
+            <Link href="/deep-learn" className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4">
                 <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg">
-                  <span className="text-2xl">📝</span>
+                  <span className="text-2xl text-white"><FaBrain /></span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Take Quiz</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Test your knowledge</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Deep Learn</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Dive Deep into Your Topic</p>
                 </div>
               </div>
             </Link>
@@ -168,7 +170,7 @@ export default function DashboardPage() {
             <Link href="/progress" className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4">
                 <div className="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg">
-                  <span className="text-2xl">📊</span>
+                  <span className="text-2xl text-white"><HiChartBar /></span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">View Progress</h3>
@@ -180,7 +182,7 @@ export default function DashboardPage() {
             <Link href="/profile" className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4">
                 <div className="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-lg">
-                  <span className="text-2xl">👤</span>
+                  <span className="text-2xl text-white"><HiUser/></span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">Profile</h3>
