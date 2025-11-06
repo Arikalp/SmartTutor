@@ -1,7 +1,10 @@
 'use client';
 import { useState } from 'react';
+import { useAuth } from './AuthProvider';
+import { saveQuizResult } from '@/lib/firestore';
 
-export default function QuizCard({ quiz }: { quiz: any }) {
+export default function QuizCard({ quiz, topic }: { quiz: any; topic?: string }) {
+  const { user } = useAuth();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showResult, setShowResult] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -12,6 +15,35 @@ export default function QuizCard({ quiz }: { quiz: any }) {
 
   const handleSelect = (id: string, val: string) =>
     setAnswers((s) => ({ ...s, [id]: val }));
+
+  const handleSubmit = async () => {
+    if (!user || !topic) {
+      console.log('❌ Quiz submit failed: Missing user or topic');
+      return;
+    }
+    
+    setShowResult(true);
+    
+    // Save quiz result to Firebase
+    const quizData = {
+      userId: user.uid,
+      topic: topic,
+      questions: questions,
+      answers: answers,
+      score: score,
+      totalQuestions: questions.length,
+      completedAt: new Date()
+    };
+    
+    console.log('📝 Saving quiz result to Firebase:', quizData);
+    
+    try {
+      const result = await saveQuizResult(quizData);
+      console.log('✅ Quiz result saved successfully:', result.id);
+    } catch (error) {
+      console.error('❌ Failed to save quiz result:', error);
+    }
+  };
 
   const score = questions.reduce((acc: number, q: any) => {
     const a = answers[q.id];
@@ -86,7 +118,7 @@ export default function QuizCard({ quiz }: { quiz: any }) {
 
       <div className="flex gap-3 mt-6">
         <button 
-          onClick={() => setShowResult(true)} 
+          onClick={handleSubmit} 
           disabled={Object.keys(answers).length === 0}
           className="flex-1 px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-semibold transition-colors flex items-center justify-center gap-2"
         >

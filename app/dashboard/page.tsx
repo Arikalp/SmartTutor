@@ -1,28 +1,36 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 import Sidebar from '@/components/Sidebar';
 import Link from 'next/link';
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null);
   const [recentTopics] = useState([
     { id: 1, title: 'Binary Trees', date: '2024-01-15', score: 85 },
     { id: 2, title: 'Machine Learning', date: '2024-01-14', score: 92 },
     { id: 3, title: 'React Hooks', date: '2024-01-13', score: 78 },
   ]);
   const router = useRouter();
+  const { user, userProfile, loading } = useAuth();
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    if (!loading && !user) {
       router.push('/login');
-      return;
     }
-    setUser(JSON.parse(userData));
-  }, [router]);
+  }, [user, loading, router]);
 
-  if (!user) return null;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -33,7 +41,7 @@ export default function DashboardPage() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Welcome back, {user.name}! 👋
+              Welcome back, {userProfile?.name || user.email}! 👋
             </h1>
             <p className="text-gray-600 dark:text-gray-300">Ready to continue your learning journey?</p>
           </div>

@@ -1,24 +1,18 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from './AuthProvider';
 import ThemeToggle from './ThemeToggle';
 
 export default function Sidebar() {
-  const [user, setUser] = useState<any>(null);
   const [stats, setStats] = useState({ topics: 12, quizzes: 8, score: 85 });
   const pathname = usePathname();
   const router = useRouter();
+  const { user, userProfile, logout } = useAuth();
 
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+    await logout();
     router.push('/login');
   };
 
@@ -50,13 +44,11 @@ export default function Sidebar() {
       {user && (
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
-            <img 
-              src={user.avatar} 
-              alt={user.name}
-              className="w-10 h-10 rounded-full"
-            />
+            <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">
+              {(userProfile?.name || user.email || 'U')[0].toUpperCase()}
+            </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-gray-900 dark:text-white truncate">{user.name}</p>
+              <p className="font-medium text-gray-900 dark:text-white truncate">{userProfile?.name || 'User'}</p>
               <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
             </div>
           </div>

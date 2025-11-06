@@ -1,30 +1,40 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
+import { useLearning } from '@/components/LearningProvider';
+import { saveStudySession } from '@/lib/firestore';
 import Sidebar from '@/components/Sidebar';
 import TopicInput from '@/components/TopicInput';
 import ExplanationCard from '@/components/ExplanationCard';
 import QuizCard from '@/components/QuizCard';
 
 export default function LearnPage() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [explanation, setExplanation] = useState('');
-  const [quiz, setQuiz] = useState<any>(null);
-  const [currentTopic, setCurrentTopic] = useState('');
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+  const { learningState, setCurrentTopic, setExplanation, setQuiz, setLoading } = useLearning();
+  const { currentTopic, explanation, quiz, loading } = learningState;
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    if (!authLoading && !user) {
       router.push('/login');
-      return;
     }
-    setUser(JSON.parse(userData));
-  }, [router]);
+  }, [user, authLoading, router]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const generate = async (topic: string) => {
-    if (!topic.trim()) return;
+    if (!topic.trim() || !user) return;
     setLoading(true);
     setExplanation('');
     setQuiz(null);
@@ -42,6 +52,24 @@ export default function LearnPage() {
       const data = await res.json();
       setExplanation(data.explanation ?? '');
       setQuiz(data.quiz ?? null);
+
+      // Save study session to Firebase
+      const sessionData = {
+        userId: user.uid,
+        topic: topic,
+        explanation: data.explanation ?? '',
+        createdAt: new Date(),
+        completed: true
+      };
+      
+      console.log('📚 Saving study session to Firebase:', sessionData);
+      
+      try {
+        const sessionResult = await saveStudySession(sessionData);
+        console.log('✅ Study session saved successfully:', sessionResult.id);
+      } catch (sessionError) {
+        console.error('❌ Failed to save study session:', sessionError);
+      }
     } catch (e) {
       console.error(e);
       alert('Failed to generate content. Please try again.');
@@ -50,7 +78,7 @@ export default function LearnPage() {
     }
   };
 
-  if (!user) return null;
+
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -101,7 +129,7 @@ export default function LearnPage() {
                 {/* Quiz */}
                 {quiz && (
                   <div className="animate-fade-in">
-                    <QuizCard quiz={quiz} />
+                    <QuizCard quiz={quiz} topic={currentTopic} />
                   </div>
                 )}
               </div>

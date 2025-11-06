@@ -1,9 +1,11 @@
 'use client';
 import { useState } from 'react';
+import { useLearning } from './LearningProvider';
 
 export default function TopicInput({ onGenerate }: { onGenerate: (topic: string) => void }) {
   const [topic, setTopic] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { clearLearningData } = useLearning();
 
   const handleGenerate = async () => {
     if (!topic.trim()) return;
@@ -51,11 +53,14 @@ export default function TopicInput({ onGenerate }: { onGenerate: (topic: string)
           )}
         </button>
         <button
-          onClick={() => setTopic('')}
-          className="px-6 py-3 rounded-lg border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold transition-colors"
+          onClick={() => {
+            setTopic('');
+            clearLearningData();
+          }}
+          className="px-6 py-3 rounded-lg border-2 border-gray-300 hover:border-gray-400 text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:border-gray-500 font-semibold transition-colors"
           disabled={isLoading}
         >
-          Clear
+          New Topic
         </button>
       </div>
     </div>
