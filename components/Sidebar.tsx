@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ThemeToggle from './ThemeToggle';
+import { FaBeer, FaBook, FaChartLine, FaHome, FaQuestion, FaUser } from 'react-icons/fa'
+import { FaBrain } from 'react-icons/fa6';
 
 export default function Sidebar() {
   const [user, setUser] = useState<any>(null);
@@ -23,11 +25,12 @@ export default function Sidebar() {
   };
 
   const menuItems = [
-    { icon: '🏠', label: 'Dashboard', href: '/dashboard' },
-    { icon: '📚', label: 'Learn', href: '/learn' },
-    { icon: '📝', label: 'Quiz', href: '/quiz' },
-    { icon: '📊', label: 'Progress', href: '/progress' },
-    { icon: '👤', label: 'Profile', href: '/profile' },
+    { icon: <FaHome />, label: 'Dashboard', href: '/dashboard' },
+    { icon: <FaBook />, label: 'Quick Learn', href: '/learn' },
+    { icon: <FaBrain />, label: 'Deep Learn', href: '/deep-learn' },
+    { icon: <FaQuestion/>, label: 'Quiz', href: '/quiz' },
+    { icon: <FaChartLine/>, label: 'Progress', href: '/progress' },
+    { icon: <FaUser/>, label: 'Profile', href: '/profile' },
   ];
 
   return (
