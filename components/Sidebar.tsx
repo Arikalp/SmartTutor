@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from './AuthProvider';
 import { getUserQuizResults } from '@/lib/firestore';
 import ThemeToggle from './ThemeToggle';
-import { FaBeer, FaBook, FaChartLine, FaHome, FaLightbulb, FaQuestion, FaUser } from 'react-icons/fa'
+import { FaBeer, FaBook, FaChartLine, FaHome, FaLightbulb, FaQuestion, FaUser, FaBars, FaTimes } from 'react-icons/fa'
 import { FaBrain } from 'react-icons/fa6';
 
 export default function Sidebar() {
@@ -13,6 +13,19 @@ export default function Sidebar() {
   const router = useRouter();
   const { user, userProfile, logout } = useAuth();
   const [recentQuizzes, setRecentQuizzes] = useState<any[]>([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const fetchRecentQuizzes = async () => {
@@ -43,8 +56,37 @@ export default function Sidebar() {
     { icon: <FaUser/>, label: 'Profile', href: '/profile' },
   ];
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <div className="w-64 bg-white dark:bg-gray-900 shadow-lg min-h-screen flex flex-col border-r border-gray-200 dark:border-gray-700 sticky top-0 self-start">
+    <>
+      {/* Mobile Hamburger Button - Fixed at top */}
+      <button
+        onClick={toggleMobileMenu}
+        className="lg:hidden fixed top-4 left-4 z-[60] p-3 bg-indigo-600 text-white rounded-lg shadow-lg hover:bg-indigo-700 transition-colors"
+        aria-label="Toggle menu"
+      >
+        {isMobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+      </button>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[45]"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div 
+        className={`w-64 bg-white dark:bg-gray-900 shadow-lg min-h-screen flex flex-col border-r border-gray-200 dark:border-gray-700 fixed lg:sticky top-0 left-0 lg:left-auto z-[50] lg:top-0 lg:self-start transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+      >
       {/* Header */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
@@ -127,6 +169,7 @@ export default function Sidebar() {
             <li key={item.href}>
               <Link
                 href={item.href}
+                onClick={closeMobileMenu}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                   pathname === item.href
                     ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-medium'
@@ -151,6 +194,7 @@ export default function Sidebar() {
           <span>Logout</span>
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

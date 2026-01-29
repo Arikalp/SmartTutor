@@ -38,11 +38,11 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 overflow-x-hidden relative">
       <Sidebar />
       
       <div className="flex-1 overflow-auto">
-        <div className="p-8">
+        <div className="p-4 md:p-6 lg:p-8 pt-16 lg:pt-8">
           <div className="max-w-2xl mx-auto">
             {/* Header */}
             <div className="mb-8">

@@ -129,11 +129,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 overflow-x-hidden relative">
       <Sidebar />
       
       <div className="flex-1 overflow-auto">
-        <div className="p-8">
+        <div className="p-4 md:p-6 lg:p-8 pt-16 lg:pt-8">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
