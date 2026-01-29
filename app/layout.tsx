@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "../components/ThemeProvider";
 import { AuthProvider } from "../components/AuthProvider";
 import { LearningProvider } from "../components/LearningProvider";
-import Footer from "../components/Footer";
+import FooterWrapper from "../components/FooterWrapper";
 import ServiceWorkerRegister from "./ServiceWorkerRegister";
 import "./globals.css";
 
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="flex-grow">
                 {children}
               </div>
-              <Footer />
+              <FooterWrapper />
             </LearningProvider>
           </AuthProvider>
         </ThemeProvider>
