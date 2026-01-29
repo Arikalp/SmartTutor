@@ -44,7 +44,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-white dark:bg-gray-900 shadow-lg h-screen flex flex-col border-r border-gray-200 dark:border-gray-700">
+    <div className="w-64 bg-white dark:bg-gray-900 shadow-lg min-h-screen flex flex-col border-r border-gray-200 dark:border-gray-700 sticky top-0 self-start">
       {/* Header */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">

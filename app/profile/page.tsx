@@ -38,7 +38,7 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
       <Sidebar />
       
       <div className="flex-1 overflow-auto">

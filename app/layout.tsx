@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "../components/ThemeProvider";
 import { AuthProvider } from "../components/AuthProvider";
 import { LearningProvider } from "../components/LearningProvider";
+import Footer from "../components/Footer";
 import ServiceWorkerRegister from "./ServiceWorkerRegister";
 import "./globals.css";
 
@@ -36,12 +37,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 p-0`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 p-0 flex flex-col min-h-screen`}>
         <ThemeProvider>
           <AuthProvider>
             <LearningProvider>
               <ServiceWorkerRegister />
-              {children}
+              <div className="flex-grow">
+                {children}
+              </div>
+              <Footer />
             </LearningProvider>
           </AuthProvider>
         </ThemeProvider>
