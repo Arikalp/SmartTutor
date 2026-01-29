@@ -5,8 +5,9 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "theme_color": "#6366f1",
   "orientation": "portrait-primary",
+  "scope": "/",
   "icons": [
     {
       "src": "/favicon.ico",
@@ -14,16 +15,35 @@
       "type": "image/x-icon"
     },
     {
-      "src": "/public/icon1.png",
+      "src": "/icon1.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/public/icon2.png",
+      "src": "/icon2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Quick Learn",
+      "url": "/learn",
+      "description": "Start a quick learning session"
+    },
+    {
+      "name": "Deep Learn",
+      "url": "/deep-learn",
+      "description": "Deep dive into a topic"
+    },
+    {
+      "name": "Progress",
+      "url": "/progress",
+      "description": "View your learning progress"
     }
   ]
 }

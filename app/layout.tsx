@@ -21,7 +21,13 @@ export const metadata: Metadata = {
   title: "Smart Tutor AI",
   description: "Your AI-powered learning companion",
   manifest: "/manifest.json",
-  themeColor: "#000000",
+  themeColor: "#6366f1",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
