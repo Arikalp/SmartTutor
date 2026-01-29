@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "../components/ThemeProvider";
 import { AuthProvider } from "../components/AuthProvider";
 import { LearningProvider } from "../components/LearningProvider";
+import ServiceWorkerRegister from "./ServiceWorkerRegister";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,6 +19,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Smart Tutor AI",
   description: "Your AI-powered learning companion",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico"
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "SmartUtor"
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -27,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <AuthProvider>
             <LearningProvider>
+              <ServiceWorkerRegister />
               {children}
             </LearningProvider>
           </AuthProvider>
