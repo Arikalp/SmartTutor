@@ -48,9 +48,12 @@ export default function LearnPage() {
         headers: { 'Content-Type': 'application/json' } 
       });
       
-      if (!res.ok) throw new Error('Failed to generate content');
-      
       const data = await res.json();
+      
+      if (!res.ok) {
+        console.error('API Error:', data);
+        throw new Error(data.error || 'Failed to generate content');
+      }
       setExplanation(data.explanation ?? '');
       setQuiz(data.quiz ?? null);
 

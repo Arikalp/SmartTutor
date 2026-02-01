@@ -27,6 +27,11 @@ export async function generateFromPrompt(prompt: string, temperature = 0.2) {
 
     const data = await response.json();
     
+    if (response.status === 429) {
+      // Rate limit error - will be handled by API route
+      throw new Error('RATE_LIMIT_EXCEEDED');
+    }
+    
     if (!response.ok) {
       console.error('Gemini API error:', data);
       throw new Error(`Gemini API error: ${data.error?.message || 'Unknown error'}`);
@@ -40,7 +45,10 @@ export async function generateFromPrompt(prompt: string, temperature = 0.2) {
     
     return result;
   } catch (error) {
-    console.error('Gemini error:', error);
-    return `Error: ${error instanceof Error ? error.message : 'Unknown error'}`;
+    // Don't log rate limit errors - they're expected and handled
+    if (error instanceof Error && error.message !== 'RATE_LIMIT_EXCEEDED') {
+      console.error('Gemini error:', error);
+    }
+    throw error; // Re-throw to let the API route handle it
   }
 }

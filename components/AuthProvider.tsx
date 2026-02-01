@@ -27,7 +27,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user);
       if (user) {
         console.log('👤 Fetching user profile for:', user.uid);
-        const profile = await getUserProfile(user.uid);
+        let profile = await getUserProfile(user.uid);
+        
+        // If profile doesn't exist, create it (for existing users or OAuth sign-ins)
+        if (!profile && user.email) {
+          console.log('⚠️ Profile not found, creating one...');
+          const displayName = user.displayName || user.email.split('@')[0];
+          await createUserProfile(user.uid, displayName, user.email);
+          profile = await getUserProfile(user.uid);
+        }
+        
         console.log('👤 User profile loaded:', profile);
         setUserProfile(profile);
       } else {

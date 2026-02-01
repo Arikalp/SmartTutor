@@ -136,6 +136,14 @@ export const updateUserStats = async (userId: string) => {
   
   console.log('📈 Updating user stats:', statsData);
   const userRef = doc(db, 'users', userId);
+  
+  // Check if user document exists before updating
+  const userSnap = await getDoc(userRef);
+  if (!userSnap.exists()) {
+    console.log('⚠️ User document does not exist, skipping stats update');
+    return;
+  }
+  
   await updateDoc(userRef, statsData);
   console.log('✅ User stats updated in Firestore');
 };

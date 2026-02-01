@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { generateFromPrompt } from '@/lib/gemini';
+import { generateFromPrompt } from '@/lib/groq';
 
 export async function POST(req: Request) {
   try {

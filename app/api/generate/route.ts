@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { generateFromPrompt } from '@/lib/gemini';
+import { generateFromPrompt } from '@/lib/groq';
 
 export async function POST(req: Request) {
   try {
@@ -55,6 +55,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ explanation, quiz });
   } catch (err: any) {
     console.error('API /generate error:', err);
+    
+    if (err.message === 'RATE_LIMIT_EXCEEDED') {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Try again later.' },
+        { status: 429 }
+      );
+    }
+    
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
