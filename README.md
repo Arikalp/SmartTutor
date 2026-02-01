@@ -4,7 +4,7 @@ A comprehensive Next.js learning platform with AI-powered content generation, us
 
 ## Features
 
-- 🧠 **AI-Powered Learning**: Generate explanations and quizzes using Google Gemini AI
+- 🧠 **AI-Powered Learning**: Generate explanations and quizzes using Groq AI (LLaMA 3.1)
 - 📚 **Quick Learn**: Get concise explanations with interactive quizzes
 - 🎯 **Deep Learn**: Comprehensive learning modules with structured sections
 - 👤 **User Authentication**: Firebase-based user management
@@ -18,7 +18,7 @@ A comprehensive Next.js learning platform with AI-powered content generation, us
 - **Backend**: Next.js API Routes
 - **Database**: Firebase Firestore
 - **Authentication**: Firebase Auth
-- **AI**: Google Gemini API
+- **AI**: Groq AI (LLaMA 3.1-8B)
 - **Deployment**: Vercel
 
 ## Quick Start
@@ -28,7 +28,7 @@ A comprehensive Next.js learning platform with AI-powered content generation, us
 - Node.js 18+ 
 - npm or yarn
 - Firebase project
-- Google Gemini API key
+- Groq API key (free at console.groq.com)
 
 ### Installation
 
@@ -46,7 +46,7 @@ npm install
 3. Set up environment variables:
 Create a `.env.local` file in the root directory:
 ```env
-GEMINI_API_KEY=your_gemini_api_key
+GROQ_API_KEY=your_groq_api_key
 NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
@@ -94,7 +94,7 @@ vercel
 
 Set these in your Vercel project settings:
 
-- `GEMINI_API_KEY`
+- `GROQ_API_KEY`
 - `NEXT_PUBLIC_FIREBASE_API_KEY`
 - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
 - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
@@ -131,11 +131,18 @@ service cloud.firestore {
 }
 ```
 
-## Google Gemini API Setup
+## Groq API Setup
 
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Create an API key
-3. Add the key to your environment variables as `GEMINI_API_KEY`
+1. Go to [Groq Console](https://console.groq.com)
+2. Sign up for a free account
+3. Create an API key
+4. Add the key to your environment variables as `GROQ_API_KEY`
+
+**Why Groq?**
+- ⚡ Super fast inference (faster than Gemini/GPT)
+- 🆓 Generous free tier (14,400+ requests/day)
+- 🚀 No quota issues
+- 🎯 High-quality LLaMA 3.1 models
 
 ## Project Structure
 
@@ -152,7 +159,7 @@ smartutor/
 ├── lib/                 # Utility libraries
 │   ├── firebase.ts      # Firebase configuration
 │   ├── firestore.ts     # Firestore functions
-│   └── gemini.ts        # Gemini AI integration
+│   └── groq.ts          # Groq AI integration
 └── public/              # Static assets
 ```
 
