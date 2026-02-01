@@ -32,9 +32,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // If profile doesn't exist, create it (for existing users or OAuth sign-ins)
         if (!profile && user.email) {
           console.log('⚠️ Profile not found, creating one...');
-          const displayName = user.displayName || user.email.split('@')[0];
-          await createUserProfile(user.uid, displayName, user.email);
-          profile = await getUserProfile(user.uid);
+          try {
+            const displayName = user.displayName || user.email.split('@')[0];
+            await createUserProfile(user.uid, displayName, user.email);
+            profile = await getUserProfile(user.uid);
+            console.log('✅ User profile created successfully:', profile);
+          } catch (error) {
+            console.error('❌ Failed to create user profile:', error);
+          }
         }
         
         console.log('👤 User profile loaded:', profile);

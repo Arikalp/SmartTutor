@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, doc, setDoc, getDoc, updateDoc, addDoc, query, where, orderBy, getDocs } from 'firebase/firestore';
+import { collection, doc, setDoc, getDoc, updateDoc, addDoc, query, where, orderBy, getDocs, Timestamp } from 'firebase/firestore';
 
 export interface UserProfile {
   uid: string;
@@ -41,7 +41,7 @@ export const createUserProfile = async (uid: string, name: string, email: string
     uid,
     name,
     email,
-    createdAt: new Date(),
+    createdAt: Timestamp.fromDate(new Date()),
     totalTopics: 0,
     totalQuizzes: 0,
     averageScore: 0
@@ -60,13 +60,21 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
 export const saveStudySession = async (session: Omit<StudySession, 'id'>) => {
   console.log('📚 Saving study session to Firestore:', session);
   const sessionsRef = collection(db, 'studySessions');
-  const result = await addDoc(sessionsRef, session);
+  
+  // Convert createdAt to Firestore Timestamp
+  const sessionData = {
+    ...session,
+    createdAt: session.createdAt instanceof Date ? Timestamp.fromDate(session.createdAt) : session.createdAt
+  };
+  
+  const result = await addDoc(sessionsRef, sessionData);
   console.log('✅ Study session saved with ID:', result.id);
   
-  // Update user stats
-  console.log('📈 Updating user stats for:', session.userId);
-  await updateUserStats(session.userId);
-  console.log('✅ User stats updated successfully');
+  // Update user stats in background (non-blocking)
+  updateUserStats(session.userId).catch(err => {
+    console.error('❌ Failed to update user stats:', err);
+  });
+  
   return result;
 };
 
@@ -89,13 +97,21 @@ export const getUserStudySessions = async (userId: string) => {
 export const saveQuizResult = async (result: Omit<QuizResult, 'id'>) => {
   console.log('📝 Saving quiz result to Firestore:', result);
   const resultsRef = collection(db, 'quizResults');
-  const docRef = await addDoc(resultsRef, result);
+  
+  // Convert completedAt to Firestore Timestamp
+  const quizData = {
+    ...result,
+    completedAt: result.completedAt instanceof Date ? Timestamp.fromDate(result.completedAt) : result.completedAt
+  };
+  
+  const docRef = await addDoc(resultsRef, quizData);
   console.log('✅ Quiz result saved with ID:', docRef.id);
   
-  // Update user stats
-  console.log('📈 Updating user stats for:', result.userId);
-  await updateUserStats(result.userId);
-  console.log('✅ User stats updated successfully');
+  // Update user stats in background (non-blocking)
+  updateUserStats(result.userId).catch(err => {
+    console.error('❌ Failed to update user stats:', err);
+  });
+  
   return docRef;
 };
 
@@ -116,34 +132,40 @@ export const getUserQuizResults = async (userId: string) => {
 
 // Update User Statistics
 export const updateUserStats = async (userId: string) => {
-  console.log('📈 Fetching user data for stats update:', userId);
-  const [sessions, results] = await Promise.all([
-    getUserStudySessions(userId),
-    getUserQuizResults(userId)
-  ]);
-  
-  const totalTopics = sessions.length;
-  const totalQuizzes = results.length;
-  const averageScore = totalQuizzes > 0 
-    ? results.reduce((sum, result) => sum + (((result as any).score / (result as any).totalQuestions) * 100), 0) / totalQuizzes 
-    : 0;
-  
-  const statsData = {
-    totalTopics,
-    totalQuizzes,
-    averageScore: Math.round(averageScore)
-  };
-  
-  console.log('📈 Updating user stats:', statsData);
-  const userRef = doc(db, 'users', userId);
-  
-  // Check if user document exists before updating
-  const userSnap = await getDoc(userRef);
-  if (!userSnap.exists()) {
-    console.log('⚠️ User document does not exist, skipping stats update');
-    return;
+  try {
+    console.log('📈 Fetching user data for stats update:', userId);
+    const userRef = doc(db, 'users', userId);
+    
+    // Check if user document exists first
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      console.log('⚠️ User document does not exist, cannot update stats');
+      // Don't try to update non-existent document
+      return;
+    }
+    
+    const [sessions, results] = await Promise.all([
+      getUserStudySessions(userId),
+      getUserQuizResults(userId)
+    ]);
+    
+    const totalTopics = sessions.length;
+    const totalQuizzes = results.length;
+    const averageScore = totalQuizzes > 0 
+      ? results.reduce((sum, result) => sum + (((result as any).score / (result as any).totalQuestions) * 100), 0) / totalQuizzes 
+      : 0;
+    
+    const statsData = {
+      totalTopics,
+      totalQuizzes,
+      averageScore: Math.round(averageScore)
+    };
+    
+    console.log('📈 Updating user stats:', statsData);
+    await updateDoc(userRef, statsData);
+    console.log('✅ User stats updated in Firestore');
+  } catch (error) {
+    console.error('❌ Error updating user stats:', error);
+    // Don't throw - stats update should not block the main operation
   }
-  
-  await updateDoc(userRef, statsData);
-  console.log('✅ User stats updated in Firestore');
 };

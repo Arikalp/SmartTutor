@@ -1,49 +1,73 @@
 'use client';
 import { useState } from 'react';
 import { useAuth } from './AuthProvider';
-import { saveQuizResult } from '@/lib/firestore';
+import { saveQuizResult, getUserProfile, createUserProfile } from '@/lib/firestore';
 
 export default function QuizCard({ quiz, topic }: { quiz: any; topic?: string }) {
   const { user, refreshProfile } = useAuth();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showResult, setShowResult] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   if (!quiz) return null;
   const questions = quiz.questions ?? [];
   if (questions.length === 0) return null;
 
-  const handleSelect = (id: string, val: string) =>
-    setAnswers((s) => ({ ...s, [id]: val }));
+  const handleSelect = (id: string, val: string) => {
+    try {
+      setAnswers((s) => ({ ...s, [id]: val }));
+    } catch (err) {
+      console.error('Error selecting answer:', err);
+      setError('Failed to select answer');
+    }
+  };
 
   const handleSubmit = async () => {
-    if (!user || !topic) {
-      console.log('❌ Quiz submit failed: Missing user or topic');
-      return;
-    }
-    
-    setShowResult(true);
-    
-    // Save quiz result to Firebase
-    const quizData = {
-      userId: user.uid,
-      topic: topic,
-      questions: questions,
-      answers: answers,
-      score: score,
-      totalQuestions: questions.length,
-      completedAt: new Date()
-    };
-    
-    console.log('📝 Saving quiz result to Firebase:', quizData);
-    
     try {
+      if (!user || !topic) {
+        console.log('❌ Quiz submit failed: Missing user or topic');
+        setError('Cannot submit quiz. Please try again.');
+        return;
+      }
+      
+      setShowResult(true);
+      setError(null);
+      
+      // Ensure user profile exists before saving quiz
+      console.log('🔍 Checking if user profile exists...');
+      let userProfile = await getUserProfile(user.uid);
+      if (!userProfile && user.email) {
+        console.log('⚠️ User profile not found, creating one...');
+        const displayName = user.displayName || user.email.split('@')[0];
+        await createUserProfile(user.uid, displayName, user.email);
+        console.log('✅ User profile created');
+      }
+      
+      // Save quiz result to Firebase
+      const quizData = {
+        userId: user.uid,
+        topic: topic,
+        questions: questions,
+        answers: answers,
+        score: score,
+        totalQuestions: questions.length,
+        completedAt: new Date()
+      };
+      
+      console.log('📝 Saving quiz result to Firebase:', quizData);
+      
       const result = await saveQuizResult(quizData);
       console.log('✅ Quiz result saved successfully:', result.id);
+      
       // Refresh user profile to update stats
-      await refreshProfile();
+      if (refreshProfile) {
+        await refreshProfile();
+      }
     } catch (error) {
       console.error('❌ Failed to save quiz result:', error);
+      setError('Failed to save quiz results. Your answers are still shown below.');
+      // Don't throw error to user - just log it and show error message
     }
   };
 
@@ -118,6 +142,15 @@ export default function QuizCard({ quiz, topic }: { quiz: any; topic?: string })
         ))}
       </div>
 
+      {error && (
+        <div className="mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <p className="text-sm text-red-800 dark:text-red-200 flex items-center gap-2">
+            <span>⚠️</span>
+            {error}
+          </p>
+        </div>
+      )}
+
       <div className="flex gap-3 mt-6">
         <button 
           onClick={handleSubmit} 
@@ -127,7 +160,11 @@ export default function QuizCard({ quiz, topic }: { quiz: any; topic?: string })
           🎯 Submit Quiz
         </button>
         <button 
-          onClick={() => { setAnswers({}); setShowResult(false); }} 
+          onClick={() => { 
+            setAnswers({}); 
+            setShowResult(false); 
+            setError(null);
+          }} 
           className="px-6 py-3 rounded-lg border-2 border-gray-300 hover:border-gray-400 text-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:border-gray-500 font-semibold transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:shadow-md transform hover:scale-105"
         >
           Reset
