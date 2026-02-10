@@ -1,4 +1,4 @@
-const CACHE_NAME = 'smartutor-v1';
+const CACHE_NAME = 'smartutor-v2';
 const urlsToCache = [
   '/',
   '/dashboard',

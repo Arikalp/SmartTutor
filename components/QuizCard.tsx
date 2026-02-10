@@ -14,6 +14,23 @@ export default function QuizCard({ quiz, topic }: { quiz: any; topic?: string })
   const questions = quiz.questions ?? [];
   if (questions.length === 0) return null;
 
+  const normalizeAnswer = (value: unknown): string => {
+    if (typeof value === 'string') return value.trim().toLowerCase();
+    if (Array.isArray(value)) return value.map((item) => String(item)).join(' ').trim().toLowerCase();
+    if (value == null) return '';
+    return String(value).trim().toLowerCase();
+  };
+
+  const isAnswerCorrect = (q: any, userAnswerRaw: unknown) => {
+    const userAnswer = normalizeAnswer(userAnswerRaw);
+    const correctAnswer = normalizeAnswer(q?.answer);
+
+    if (!userAnswer || !correctAnswer) return false;
+    if (q?.type === 'mcq') return userAnswer === correctAnswer;
+    if (q?.type === 'short') return correctAnswer.includes(userAnswer);
+    return false;
+  };
+
   const handleSelect = (id: string, val: string) => {
     try {
       setAnswers((s) => ({ ...s, [id]: val }));
@@ -74,9 +91,7 @@ export default function QuizCard({ quiz, topic }: { quiz: any; topic?: string })
   const score = questions.reduce((acc: number, q: any) => {
     const a = answers[q.id];
     if (!a) return acc;
-    if (q.type === 'mcq') return acc + (a.trim().toLowerCase() === q.answer.trim().toLowerCase() ? 1 : 0);
-    if (q.type === 'short') return acc + (q.answer.toLowerCase().includes(a.trim().toLowerCase()) ? 1 : 0);
-    return acc;
+    return acc + (isAnswerCorrect(q, a) ? 1 : 0);
   }, 0);
 
   const getScoreColor = () => {
@@ -187,9 +202,7 @@ export default function QuizCard({ quiz, topic }: { quiz: any; topic?: string })
             <h4 className="font-semibold text-gray-800 mb-3">Answer Review:</h4>
             {questions.map((q: any, index: number) => {
               const userAnswer = answers[q.id];
-              const isCorrect = q.type === 'mcq' 
-                ? userAnswer?.trim().toLowerCase() === q.answer.trim().toLowerCase()
-                : q.answer.toLowerCase().includes(userAnswer?.trim().toLowerCase() || '');
+              const isCorrect = isAnswerCorrect(q, userAnswer);
               
               return (
                 <div key={q.id} className="bg-white rounded-lg p-4 border">
