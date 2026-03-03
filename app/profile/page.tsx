@@ -23,9 +23,22 @@ export default function ProfilePage() {
     }
   }, [userProfile]);
 
-  const handleSave = () => {
-    console.log('Profile update:', formData);
-    setEditing(false);
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    if (!user) return;
+    setSaving(true);
+    try {
+      const { doc, updateDoc } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, { name: formData.name });
+      // Force page reload to refresh the profile from Firestore
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      setSaving(false);
+    }
   };
 
   if (loading) {
@@ -106,9 +119,10 @@ export default function ProfilePage() {
                     <>
                       <button
                         onClick={handleSave}
-                        className="btn-gradient px-6 py-2.5"
+                        disabled={saving}
+                        className="btn-gradient px-6 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Save Changes
+                        {saving ? 'Saving...' : 'Save Changes'}
                       </button>
                       <button
                         onClick={() => setEditing(false)}
