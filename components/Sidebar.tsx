@@ -92,7 +92,7 @@ export default function Sidebar() {
         <div className="p-6 border-b border-border-glass">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="text-2xl bg-white/10 rounded-xl p-2 border border-white/5"><img src="\deep-learning.png" className="max-w-8" /> </div>
+              <div className="text-2xl bg-white/15 rounded-xl p-2 border border-white/10 relative z-10 shadow-[0_0_12px_#4F46E540]"><img src="\deep-learning.png" className="max-w-8 brightness-110 drop-shadow-[0_0_6px_#4F46E5]" /> </div>
               <div>
                 <h1 className="font-bold text-text-main tracking-tight">Smart Tutor</h1>
                 <p className="text-xs text-primary font-medium">AI Learning Platform</p>
