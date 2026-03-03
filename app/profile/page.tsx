@@ -29,8 +29,8 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"></div>
+      <div className="min-h-screen bg-bg-main flex items-center justify-center animate-fade-in-up">
+        <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full glow"></div>
       </div>
     );
   }
@@ -38,28 +38,28 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 overflow-x-hidden relative">
+    <div className="flex min-h-screen bg-bg-main overflow-x-hidden relative animate-fade-in-up">
       <Sidebar />
-      
+
       <div className="flex-1 overflow-auto">
-        <div className="p-4 md:p-6 lg:p-8 pt-16 lg:pt-8">
-          <div className="max-w-2xl mx-auto">
+        <div className="p-4 md:p-6 lg:p-8 pt-16 md:pt-8 w-full max-w-5xl mx-auto">
+          <div className="max-w-2xl mx-auto space-y-8">
             {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-white mb-2">Profile Settings</h1>
-              <p className="text-gray-400">Manage your account information and preferences</p>
+            <div>
+              <h1 className="text-3xl font-bold text-text-main mb-2 tracking-tight">Profile Settings</h1>
+              <p className="text-text-muted font-medium">Manage your account information and preferences</p>
             </div>
 
             {/* Profile Card */}
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-sm p-8 border border-gray-300 dark:border-gray-700">
-              <div className="flex items-center gap-6 mb-8">
-                <div className="w-20 h-20 rounded-full bg-indigo-600 flex items-center justify-center text-white text-2xl font-bold">
+            <div className="glass-panel p-8 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+              <div className="flex items-center gap-6 mb-8 pb-8 border-b border-border-glass">
+                <div className="w-20 h-20 rounded-full bg-btn-gradient flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-primary/20">
                   {(userProfile?.name || user?.email || 'U')[0].toUpperCase()}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">{userProfile?.name || 'User'}</h2>
-                  <p className="text-gray-600 dark:text-gray-300">{user?.email}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  <h2 className="text-2xl font-bold text-text-main mb-1">{userProfile?.name || 'User'}</h2>
+                  <p className="text-text-muted font-medium">{user?.email}</p>
+                  <p className="text-sm text-primary font-semibold mt-2 bg-primary/10 inline-block px-3 py-1 rounded-lg border border-primary/20">
                     Member since {userProfile?.createdAt ? (
                       // createdAt may be a Firestore Timestamp or a JS Date; handle both
                       (userProfile.createdAt as any)?.seconds ?
@@ -73,30 +73,30 @@ export default function ProfilePage() {
               {/* Form */}
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-2">Full Name</label>
+                  <label className="block text-sm font-semibold text-text-muted mb-2">Full Name</label>
                   {editing ? (
                     <input
                       type="text"
                       value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 bg-bg-secondary border border-border-glass text-text-main rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
                     />
                   ) : (
-                    <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">{userProfile?.name || 'User'}</div>
+                    <div className="px-4 py-3 bg-white/5 border border-border-glass rounded-xl text-text-main font-medium">{userProfile?.name || 'User'}</div>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-2">Email Address</label>
+                  <label className="block text-sm font-semibold text-text-muted mb-2">Email Address</label>
                   {editing ? (
                     <input
                       type="email"
                       value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-4 py-3 bg-bg-secondary border border-border-glass text-text-main rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
                     />
                   ) : (
-                    <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">{user?.email}</div>
+                    <div className="px-4 py-3 bg-white/5 border border-border-glass rounded-xl text-text-main font-medium">{user?.email}</div>
                   )}
                 </div>
 
@@ -105,13 +105,13 @@ export default function ProfilePage() {
                     <>
                       <button
                         onClick={handleSave}
-                        className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
+                        className="btn-gradient px-6 py-2.5"
                       >
                         Save Changes
                       </button>
                       <button
                         onClick={() => setEditing(false)}
-                        className="px-6 py-2 border border-gray-300 hover:border-gray-400 text-gray-700 rounded-lg font-medium transition-colors"
+                        className="btn-secondary px-6 py-2.5"
                       >
                         Cancel
                       </button>
@@ -119,7 +119,7 @@ export default function ProfilePage() {
                   ) : (
                     <button
                       onClick={() => setEditing(true)}
-                      className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
+                      className="btn-gradient px-6 py-2.5"
                     >
                       Edit Profile
                     </button>
@@ -129,24 +129,26 @@ export default function ProfilePage() {
             </div>
 
             {/* Stats Card */}
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-sm p-8 border border-gray-300 dark:border-gray-700 mt-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Learning Statistics</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">{userProfile?.totalTopics || 0}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Topics Learned</div>
+            <div className="glass-panel p-8 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+              <h3 className="text-xl font-bold text-text-main mb-6 flex items-center gap-2">
+                <span>📊</span> Learning Statistics
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-center">
+                  <div className="text-3xl font-bold text-primary mb-1">{userProfile?.totalTopics || 0}</div>
+                  <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">Topics Learned</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">{userProfile?.totalQuizzes || 0}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Quizzes Taken</div>
+                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-center">
+                  <div className="text-3xl font-bold text-green-400 mb-1">{userProfile?.totalQuizzes || 0}</div>
+                  <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">Quizzes Taken</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 mb-2">{userProfile?.averageScore || 0}%</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Average Score</div>
+                <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 text-center">
+                  <div className="text-3xl font-bold text-purple-400 mb-1">{userProfile?.averageScore || 0}%</div>
+                  <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">Average Score</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-600 mb-2">-</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Day Streak</div>
+                <div className="bg-accent/10 border border-accent/20 rounded-xl p-4 text-center">
+                  <div className="text-3xl font-bold text-accent mb-1">-</div>
+                  <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">Day Streak</div>
                 </div>
               </div>
             </div>

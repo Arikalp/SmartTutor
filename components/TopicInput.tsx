@@ -21,9 +21,9 @@ export default function TopicInput({ onGenerate }: { onGenerate: (topic: string)
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4 border border-gray-300 dark:border-gray-700">
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-400">
+    <div className="glass-panel p-6 space-y-5">
+      <div className="space-y-3">
+        <label className="block text-sm font-semibold text-text-muted">
           What would you like to learn today?
         </label>
         <input
@@ -31,19 +31,19 @@ export default function TopicInput({ onGenerate }: { onGenerate: (topic: string)
           onChange={(e) => setTopic(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="e.g., Binary Trees, Photosynthesis, Machine Learning..."
-          className="w-full p-4 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:border-indigo-500 focus:outline-none transition-colors text-lg"
+          className="w-full p-4 bg-bg-secondary border border-border-glass text-text-main rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-lg shadow-inner"
           disabled={isLoading}
         />
       </div>
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={handleGenerate}
           disabled={!topic.trim() || isLoading}
-          className="flex-1 px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white font-semibold transition-colors flex items-center justify-center gap-2"
+          className="flex-1 btn-gradient disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>
-              <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+              <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
               Generating...
             </>
           ) : (
@@ -57,7 +57,7 @@ export default function TopicInput({ onGenerate }: { onGenerate: (topic: string)
             setTopic('');
             clearLearningData();
           }}
-          className="px-6 py-3 rounded-lg border-2 border-gray-300 hover:border-gray-400 text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:border-gray-500 font-semibold transition-colors"
+          className="sm:w-auto w-full btn-secondary"
           disabled={isLoading}
         >
           New Topic

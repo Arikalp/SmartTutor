@@ -16,8 +16,8 @@ export default function QuizPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"></div>
+      <div className="min-h-screen bg-bg-main flex items-center justify-center animate-fade-in-up">
+        <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full glow"></div>
       </div>
     );
   }
@@ -25,29 +25,29 @@ export default function QuizPage() {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-bg-main animate-fade-in-up">
       <Sidebar />
-      
+
       <div className="flex-1 overflow-auto">
-        <div className="p-8">
+        <div className="p-8 w-full max-w-5xl mx-auto pt-16 lg:pt-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              📝 Quick Quiz
+            <h1 className="text-3xl font-bold text-text-main mb-2 tracking-tight">
+              <span className="text-primary text-4xl mr-3">📝</span>Quick Quiz
             </h1>
-            <p className="text-gray-600">Test your knowledge with instant quizzes</p>
+            <p className="text-text-muted font-medium ml-12">Test your knowledge with instant quizzes</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-12 text-center">
-            <div className="text-6xl mb-4">🚧</div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+          <div className="glass-panel p-16 text-center">
+            <div className="text-6xl mb-6 animate-pulse" style={{ animationDuration: '3s' }}>🚧</div>
+            <h3 className="text-2xl font-bold text-text-main mb-3">
               Quiz Feature Coming Soon!
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-text-muted mb-8 max-w-md mx-auto line-height-relaxed">
               We're working on standalone quiz functionality. For now, you can take quizzes after learning topics.
             </p>
-            <button 
+            <button
               onClick={() => router.push('/learn')}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="btn-gradient inline-flex"
             >
               Go to Learn Page
             </button>

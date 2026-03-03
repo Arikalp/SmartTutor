@@ -29,14 +29,14 @@ export default function DeepLearnPage() {
     setCurrentTopic(topic);
 
     try {
-      const res = await fetch('/api/deep-generate', { 
-        method: 'POST', 
-        body: JSON.stringify({ topic }), 
-        headers: { 'Content-Type': 'application/json' } 
+      const res = await fetch('/api/deep-generate', {
+        method: 'POST',
+        body: JSON.stringify({ topic }),
+        headers: { 'Content-Type': 'application/json' }
       });
-      
+
       if (!res.ok) throw new Error('Failed to generate content');
-      
+
       const data = await res.json();
       setQuiz(data); // Store the entire sections data in quiz state
 
@@ -48,7 +48,7 @@ export default function DeepLearnPage() {
         createdAt: new Date(),
         completed: true
       };
-      
+
       try {
         const sessionResult = await saveStudySession(sessionData);
         console.log('✅ Deep study session saved:', sessionResult.id);
@@ -66,8 +66,8 @@ export default function DeepLearnPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"></div>
+      <div className="min-h-screen bg-bg-main flex items-center justify-center animate-fade-in-up">
+        <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full glow"></div>
       </div>
     );
   }
@@ -75,17 +75,17 @@ export default function DeepLearnPage() {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 overflow-x-hidden relative">
+    <div className="flex min-h-screen bg-bg-main overflow-x-hidden relative animate-fade-in-up">
       <Sidebar />
-      
+
       <div className="flex-1 overflow-auto">
-        <div className="p-4 md:p-6 lg:p-8 pt-16 lg:pt-8">
+        <div className="p-4 md:p-6 lg:p-8 pt-16 md:pt-8 w-full max-w-5xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex gap-2 items-center">
-              <FaBrain /> Deep Learn with AI
+            <h1 className="text-3xl font-bold text-text-main mb-2 flex gap-3 items-center tracking-tight">
+              <span className="text-accent text-4xl"><FaBrain /></span> Deep Learn with AI
             </h1>
-            <p className="text-gray-600 dark:text-gray-300">Comprehensive learning with structured sections and detailed quizzes</p>
+            <p className="text-text-muted font-medium ml-12">Comprehensive learning with structured sections and detailed quizzes</p>
           </div>
 
           <div className="max-w-4xl mx-auto space-y-8">
@@ -94,12 +94,12 @@ export default function DeepLearnPage() {
 
             {/* Loading State */}
             {loading && (
-              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
-                <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+              <div className="glass-panel p-10 text-center animate-fade-in-up">
+                <div className="animate-spin w-12 h-12 border-4 border-accent border-t-transparent rounded-full mx-auto mb-6 glow"></div>
+                <h3 className="text-xl font-bold text-text-main mb-2">
                   Generating deep content for "{currentTopic}"...
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">Creating comprehensive sections and quizzes</p>
+                <p className="text-text-muted">Creating comprehensive sections and quizzes...</p>
               </div>
             )}
 
@@ -107,21 +107,23 @@ export default function DeepLearnPage() {
             {!loading && quiz?.sections && (
               <div className="space-y-8">
                 {/* Topic Header */}
-                <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-indigo-500">
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                    🎯 Deep Learning: <span className="text-emerald-500 dark:text-emerald-500">{currentTopic}</span>
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 mt-2">
-                    {quiz.sections.length} comprehensive sections with individual quizzes
-                  </p>
+                <div className="glass-panel p-6 border-l-4 border-l-accent flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-text-main flex items-center gap-3">
+                      <span className="text-3xl">🎯</span> Deep Learning: <span className="text-accent">{currentTopic}</span>
+                    </h2>
+                    <p className="text-text-muted mt-2 font-medium">
+                      {quiz.sections.length} comprehensive sections with individual quizzes
+                    </p>
+                  </div>
                 </div>
 
                 {/* Sections */}
                 <div className="space-y-6">
                   {quiz.sections.map((section: any, index: number) => (
-                    <div key={section.id} className="animate-fade-in">
-                      <DeepSectionCard 
-                        section={section} 
+                    <div key={section.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                      <DeepSectionCard
+                        section={section}
                         topic={currentTopic}
                         sectionIndex={index}
                       />
@@ -133,12 +135,12 @@ export default function DeepLearnPage() {
 
             {/* Empty State */}
             {!loading && !quiz?.sections && (
-              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-12 text-center">
-                <div className="text-6xl mb-4">🧠</div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
+              <div className="glass-panel p-16 text-center">
+                <div className="text-6xl mb-6 animate-pulse" style={{ animationDuration: '3s' }}>🧠</div>
+                <h3 className="text-2xl font-bold text-text-main mb-3">
                   Ready for deep learning?
                 </h3>
-                <p className="text-gray-400 dark:text-gray-400">
+                <p className="text-text-muted max-w-md mx-auto line-height-relaxed">
                   Enter a topic to get comprehensive sections with detailed explanations and targeted quizzes.
                 </p>
               </div>

@@ -15,18 +15,18 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+    <div className="min-h-screen bg-bg-main flex items-center justify-center p-4 animate-fade-in-up">
+      <div className="glass-panel p-8 max-w-md w-full text-center">
         <div className="text-6xl mb-4">⚠️</div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-2xl font-bold text-text-main mb-4">
           Something went wrong!
         </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-text-muted mb-6">
           An error occurred while processing your request. Please try again.
         </p>
         {error.message && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6 text-left">
-            <p className="text-sm text-red-800 dark:text-red-200 font-mono">
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6 text-left">
+            <p className="text-sm text-red-400 font-mono">
               {error.message}
             </p>
           </div>
@@ -34,13 +34,13 @@ export default function Error({
         <div className="flex gap-3">
           <button
             onClick={reset}
-            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="flex-1 btn-gradient"
           >
             Try Again
           </button>
           <button
             onClick={() => window.location.href = '/dashboard'}
-            className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="flex-1 btn-secondary"
           >
             Go Home
           </button>

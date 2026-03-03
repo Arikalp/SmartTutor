@@ -6,17 +6,17 @@ export default function ExplanationCard({ text }: { text: string }) {
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-green-500 border border-gray-300 dark:border-gray-700">
+    <div className="glass-panel !rounded-xl p-6 border-l-4 border-l-green-500">
       <div className="flex items-center gap-2 mb-4">
         <span className="text-2xl">💡</span>
-        <h3 className="text-xl font-bold text-gray-800 dark:text-white">Explanation</h3>
+        <h3 className="text-xl font-bold text-text-main">Explanation</h3>
       </div>
-      <div className="prose prose-lg max-w-none text-gray-700 dark:text-gray-300 leading-relaxed">
+      <div className="prose prose-lg max-w-none text-text-muted leading-relaxed">
         {text.split('\n').map((paragraph, index) => (
           paragraph.trim() && (
-            <p 
-              key={index} 
-              className="mb-4 last:mb-0 text-gray-800 dark:text-gray-200"
+            <p
+              key={index}
+              className="mb-4 last:mb-0 text-text-main/80"
               dangerouslySetInnerHTML={{ __html: formatText(paragraph) }}
             />
           )

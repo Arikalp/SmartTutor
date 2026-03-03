@@ -52,20 +52,20 @@ export default function ProgressPage() {
   // Calculate progress data from actual user data
   const progressData = () => {
     const subjects: Record<string, { topics: number; quizzes: number; scores: number[]; }> = {};
-    
+
     studySessions.forEach((session: any) => {
       const subject = getSubjectFromTopic(session.topic);
       if (!subjects[subject]) subjects[subject] = { topics: 0, quizzes: 0, scores: [] };
       subjects[subject].topics++;
     });
-    
+
     quizResults.forEach((result: any) => {
       const subject = getSubjectFromTopic(result.topic);
       if (!subjects[subject]) subjects[subject] = { topics: 0, quizzes: 0, scores: [] };
       subjects[subject].quizzes++;
       subjects[subject].scores.push((result.score / result.totalQuestions) * 100);
     });
-    
+
     return Object.entries(subjects).map(([subject, data]) => ({
       subject,
       topics: data.topics,
@@ -78,7 +78,7 @@ export default function ProgressPage() {
   // Recent activity from actual user data
   const recentActivity = () => {
     const activities: any[] = [];
-    
+
     studySessions.slice(0, 3).forEach((session: any) => {
       activities.push({
         date: new Date(session.createdAt.seconds * 1000).toLocaleDateString(),
@@ -87,7 +87,7 @@ export default function ProgressPage() {
         type: 'learn'
       });
     });
-    
+
     quizResults.slice(0, 3).forEach((result: any) => {
       activities.push({
         date: new Date(result.completedAt.seconds * 1000).toLocaleDateString(),
@@ -96,7 +96,7 @@ export default function ProgressPage() {
         type: 'quiz'
       });
     });
-    
+
     return activities.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
   };
 
@@ -108,8 +108,8 @@ export default function ProgressPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"></div>
+      <div className="min-h-screen bg-bg-main flex items-center justify-center animate-fade-in-up">
+        <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full glow"></div>
       </div>
     );
   }
@@ -120,69 +120,69 @@ export default function ProgressPage() {
   const activities = recentActivity();
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 overflow-x-hidden relative">
+    <div className="flex min-h-screen bg-bg-main overflow-x-hidden relative animate-fade-in-up">
       <Sidebar />
-      
+
       <div className="flex-1 overflow-auto">
-        <div className="p-4 md:p-6 lg:p-8 pt-16 lg:pt-8">
+        <div className="p-4 md:p-6 lg:p-8 pt-16 md:pt-8 w-full max-w-5xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Learning Progress</h1>
-            <p className="text-gray-600 dark:text-gray-300">Track your learning journey and achievements</p>
+            <h1 className="text-3xl font-bold text-text-main mb-2 tracking-tight">Learning Progress</h1>
+            <p className="text-text-muted font-medium">Track your learning journey and achievements</p>
           </div>
 
           {dataLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"></div>
+              <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full glow"></div>
             </div>
           ) : (
             <>
               {/* Overall Stats */}
-              <div className="grid md:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="glass-panel p-5">
                   <div className="flex items-center gap-4">
-                    <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
+                    <div className="bg-primary/10 p-3 rounded-xl border border-primary/20">
                       <span className="text-2xl">📚</span>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{userProfile?.totalTopics || 0}</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Topics Completed</div>
+                      <div className="text-2xl font-bold text-primary">{userProfile?.totalTopics || 0}</div>
+                      <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">Topics</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+                <div className="glass-panel p-5">
                   <div className="flex items-center gap-4">
-                    <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg">
+                    <div className="bg-green-500/10 p-3 rounded-xl border border-green-500/20">
                       <span className="text-2xl">📝</span>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{userProfile?.totalQuizzes || 0}</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Quizzes Taken</div>
+                      <div className="text-2xl font-bold text-green-400">{userProfile?.totalQuizzes || 0}</div>
+                      <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">Quizzes</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+                <div className="glass-panel p-5">
                   <div className="flex items-center gap-4">
-                    <div className="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg">
+                    <div className="bg-purple-500/10 p-3 rounded-xl border border-purple-500/20">
                       <span className="text-2xl">🎯</span>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{userProfile?.averageScore || 0}%</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Average Score</div>
+                      <div className="text-2xl font-bold text-purple-400">{userProfile?.averageScore || 0}%</div>
+                      <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">Avg Score</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+                <div className="glass-panel p-5">
                   <div className="flex items-center gap-4">
-                    <div className="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-lg">
+                    <div className="bg-accent/10 p-3 rounded-xl border border-accent/20">
                       <span className="text-2xl">🔥</span>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">-</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Day Streak</div>
+                      <div className="text-2xl font-bold text-accent">-</div>
+                      <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">Day Streak</div>
                     </div>
                   </div>
                 </div>
@@ -191,25 +191,27 @@ export default function ProgressPage() {
           )}
 
           {!dataLoading && (
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-6">
               {/* Subject Progress */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Subject Progress</h2>
+              <div className="glass-panel p-6 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+                <h2 className="text-xl font-bold text-text-main mb-6 flex items-center gap-2">
+                  <span>📊</span> Subject Progress
+                </h2>
                 {subjects.length > 0 ? (
                   <div className="space-y-6">
                     {subjects.map((subject, index) => (
                       <div key={index}>
                         <div className="flex justify-between items-center mb-2">
-                          <h3 className="font-medium text-gray-900 dark:text-white">{subject.subject}</h3>
-                          <span className="text-sm text-gray-600 dark:text-gray-400">{subject.progress}%</span>
+                          <h3 className="font-semibold text-text-main">{subject.subject}</h3>
+                          <span className="text-sm text-primary font-bold">{subject.progress}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-3">
-                          <div 
-                            className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${subject.progress}%` }}
+                        <div className="w-full bg-white/5 rounded-full h-2.5 mb-3 border border-white/5">
+                          <div
+                            className="h-2.5 rounded-full transition-all duration-500"
+                            style={{ width: `${subject.progress}%`, background: 'linear-gradient(135deg, #4F46E5, #3B82F6)' }}
                           ></div>
                         </div>
-                        <div className="grid grid-cols-3 gap-4 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="grid grid-cols-3 gap-4 text-xs font-medium text-text-muted">
                           <div>{subject.topics} topics</div>
                           <div>{subject.quizzes} quizzes</div>
                           <div>{subject.avgScore}% avg</div>
@@ -218,7 +220,7 @@ export default function ProgressPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <div className="text-center py-8 text-text-muted">
                     <span className="text-4xl mb-4 block">📚</span>
                     <p>No learning progress yet. Start learning to see your progress!</p>
                   </div>
@@ -226,25 +228,26 @@ export default function ProgressPage() {
               </div>
 
               {/* Recent Activity */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Recent Activity</h2>
+              <div className="glass-panel p-6 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                <h2 className="text-xl font-bold text-text-main mb-6 flex items-center gap-2">
+                  <span>📈</span> Recent Activity
+                </h2>
                 {activities.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {activities.map((activity, index) => (
-                      <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                        <div className={`p-2 rounded-lg ${activity.type === 'quiz' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-blue-100 dark:bg-blue-900/30'}`}>
+                      <div key={index} className="flex items-center gap-4 p-3 bg-white/5 border border-border-glass rounded-xl transition-colors hover:bg-white/10">
+                        <div className={`p-2 rounded-xl ${activity.type === 'quiz' ? 'bg-green-500/10 border border-green-500/20' : 'bg-primary/10 border border-primary/20'}`}>
                           <span className="text-lg">{activity.type === 'quiz' ? '📝' : '📚'}</span>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-medium text-gray-900 dark:text-white">{activity.topic}</h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{activity.date}</p>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-text-main truncate">{activity.topic}</h3>
+                          <p className="text-xs text-text-muted">{activity.date}</p>
                         </div>
                         {activity.score !== null && (
-                          <div className={`text-sm font-medium px-2 py-1 rounded ${
-                            activity.score >= 90 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-                            activity.score >= 80 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                            'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                          }`}>
+                          <div className={`text-xs font-bold px-2.5 py-1 rounded-lg ${activity.score >= 90 ? 'bg-green-500/20 text-green-400 border border-green-500/20' :
+                            activity.score >= 80 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/20' :
+                              'bg-red-500/20 text-red-400 border border-red-500/20'
+                            }`}>
                             {activity.score}%
                           </div>
                         )}
@@ -252,7 +255,7 @@ export default function ProgressPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <div className="text-center py-8 text-text-muted">
                     <span className="text-4xl mb-4 block">📈</span>
                     <p>No recent activity. Start learning to see your activity!</p>
                   </div>
