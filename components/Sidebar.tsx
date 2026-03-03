@@ -86,7 +86,7 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <div
-        className={`w-64 bg-bg-secondary/95 backdrop-blur-xl shadow-2xl min-h-screen flex flex-col border-r border-border-glass fixed md:sticky top-0 left-0 md:left-auto z-[50] md:top-0 md:self-start transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+        className={`w-64 bg-black/70 backdrop-blur-xl shadow-2xl min-h-screen flex flex-col border-r border-white/10 fixed md:sticky top-0 left-0 md:left-auto z-[50] md:top-0 md:self-start transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
       >
         {/* Header */}
         <div className="p-6 border-b border-border-glass">
