@@ -15,7 +15,7 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-bg-main flex items-center justify-center animate-fade-in-up">
+    <div className="min-h-screen bg-transparent flex items-center justify-center animate-fade-in-up">
       <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full glow"></div>
     </div>
   );

@@ -24,7 +24,7 @@ export default function LearnPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-bg-main flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full glow"></div>
       </div>
     );
@@ -87,7 +87,7 @@ export default function LearnPage() {
 
 
   return (
-    <div className="flex min-h-screen bg-bg-main overflow-x-hidden relative animate-fade-in-up">
+    <div className="flex min-h-screen bg-transparent overflow-x-hidden relative animate-fade-in-up">
       <Sidebar />
 
       <div className="flex-1 overflow-auto">

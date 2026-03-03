@@ -4,6 +4,7 @@ import { ThemeProvider } from "../components/ThemeProvider";
 import { AuthProvider } from "../components/AuthProvider";
 import { LearningProvider } from "../components/LearningProvider";
 import FooterWrapper from "../components/FooterWrapper";
+import BackgroundGradient from "../components/BackgroundGradient";
 import ServiceWorkerRegister from "./ServiceWorkerRegister";
 import "./globals.css";
 
@@ -49,7 +50,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <LearningProvider>
               <ServiceWorkerRegister />
-              <div className="flex-grow">
+              <BackgroundGradient />
+              <div className="flex-grow relative z-10">
                 {children}
               </div>
               <FooterWrapper />

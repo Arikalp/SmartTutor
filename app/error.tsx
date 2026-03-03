@@ -15,7 +15,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-bg-main flex items-center justify-center p-4 animate-fade-in-up">
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-4 animate-fade-in-up">
       <div className="glass-panel p-8 max-w-md w-full text-center">
         <div className="text-6xl mb-4">⚠️</div>
         <h2 className="text-2xl font-bold text-text-main mb-4">

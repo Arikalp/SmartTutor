@@ -16,7 +16,7 @@ export default function QuizPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-main flex items-center justify-center animate-fade-in-up">
+      <div className="min-h-screen bg-transparent flex items-center justify-center animate-fade-in-up">
         <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full glow"></div>
       </div>
     );
@@ -25,7 +25,7 @@ export default function QuizPage() {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-bg-main animate-fade-in-up">
+    <div className="flex min-h-screen bg-transparent animate-fade-in-up">
       <Sidebar />
 
       <div className="flex-1 overflow-auto">
