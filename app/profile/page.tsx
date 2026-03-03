@@ -7,8 +7,9 @@ import Sidebar from '@/components/Sidebar';
 export default function ProfilePage() {
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '' });
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const router = useRouter();
-  const { user, userProfile, loading } = useAuth();
+  const { user, userProfile, loading, logout } = useAuth();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -152,9 +153,49 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
+
+            {/* Logout */}
+            <div className="animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+              <button
+                onClick={() => setShowLogoutConfirm(true)}
+                className="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-xl transition-all duration-300 font-semibold"
+              >
+                <span className="text-xl">🚪</span>
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowLogoutConfirm(false)}
+          />
+          <div className="glass-panel p-8 max-w-sm w-full text-center relative z-10 animate-fade-in-up !hover:translate-y-0">
+            <div className="text-5xl mb-4">👋</div>
+            <h3 className="text-xl font-bold text-text-main mb-2">Confirm Logout</h3>
+            <p className="text-text-muted mb-6">Are you sure you want to log out of your account?</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="btn-secondary flex-1"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => { await logout(); router.push('/login'); }}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 rounded-xl font-semibold transition-all duration-300"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
